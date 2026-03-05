@@ -11,7 +11,6 @@ type Cost struct {
 	BusinessID  primitive.ObjectID `bson:"business_id" json:"business_id"`
 	UserID      primitive.ObjectID `bson:"user_id" json:"user_id"`
 	Description string             `bson:"description" json:"description"`
-	Amount      float64            `bson:"amount" json:"amount"`
 	Balance     float64            `bson:"balance" json:"balance"`
 	Date        time.Time          `bson:"date" json:"date"`
 	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
