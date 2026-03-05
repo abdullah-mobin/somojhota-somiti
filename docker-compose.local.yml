@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: somojhota-somiti-mongodb-local
+    ports:
+      - "27019:27019"
+    volumes:
+      - somojhota_somiti_mongo_data_local:/data/db
+      - ./init-replica-local.sh:/init-replica-local.sh
+    entrypoint: ["bash", "/init-replica-local.sh"]
+    restart: unless-stopped
+
+volumes:
+  somojhota_somiti_mongo_data_local:
