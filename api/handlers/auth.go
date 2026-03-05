@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"net/mail"
 	"strings"
 
 	"github.com/abdullah-mobin/somojhota-somiti/api/dtos"
@@ -28,6 +29,14 @@ func Register(c *fiber.Ctx) error {
 	if err != nil {
 		errorsArr := strings.Split(err.Error(), ";")
 		return response.ValidationException(c, "Invalid request", errorsArr)
+	}
+
+	if !utils.IsValidBDPhoneNumber(self.PhoneNumber) {
+		return response.ValidationException(c, "Invalid phone number", "Phone number is not a valid Bangladeshi phone number")
+	}
+	_, err = mail.ParseAddress(self.Email)
+	if err != nil {
+		return response.ValidationException(c, "Invalid email address", "Email address is not valid")
 	}
 
 	access, refresh, err := repository.NewUserRepository().CreateNewUser(context.Background(), &self)
@@ -59,6 +68,10 @@ func Login(c *fiber.Ctx) error {
 		errorsArr := strings.Split(err.Error(), ";")
 		return response.ValidationException(c, "Invalid request", errorsArr)
 	}
+	if !utils.IsValidBDPhoneNumber(self.PhoneNumber) {
+		return response.ValidationException(c, "Invalid phone number", "Phone number is not a valid Bangladeshi phone number")
+	}
+
 	repo := repository.NewAuthRepository()
 	credential, err := repo.GetCredentialByPhoneNumber(context.Background(), self.PhoneNumber)
 	if err != nil {

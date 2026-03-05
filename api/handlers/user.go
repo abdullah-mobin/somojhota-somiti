@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"log"
 
 	"github.com/abdullah-mobin/somojhota-somiti/api/repository"
 	"github.com/abdullah-mobin/somojhota-somiti/api/response"
@@ -21,7 +20,6 @@ import (
 //	@Router			/user/ [get]
 func GetUser(c *fiber.Ctx) error {
 	id := c.Locals("userId").(string)
-	log.Println(id)
 
 	business, err := repository.NewUserRepository().GetUserByID(context.Background(), id)
 	if err != nil {
