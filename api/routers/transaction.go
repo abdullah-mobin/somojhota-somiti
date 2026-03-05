@@ -9,5 +9,6 @@ import (
 func TransactionRoutes(route fiber.Router) {
 	route.Post("/new", middlewares.IsAuthenticated, handlers.CreateTransaction)
 	route.Get("/:id", middlewares.IsAuthenticated, handlers.GetTransaction)
+	route.Get("/", middlewares.IsAuthenticated, handlers.GetTransactions)
 	route.Put("/:id", middlewares.IsAuthenticated, handlers.UpdateTransaction)
 }

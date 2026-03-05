@@ -8,4 +8,5 @@ import (
 
 func UserRoutes(route fiber.Router) {
 	route.Get("/", middlewares.IsAuthenticated, handlers.GetUser)
+	route.Get("/:id", middlewares.IsAuthenticated, handlers.GetUserByID)
 }

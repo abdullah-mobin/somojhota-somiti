@@ -7,6 +7,7 @@ import (
 	"github.com/abdullah-mobin/somojhota-somiti/api/dtos"
 	"github.com/abdullah-mobin/somojhota-somiti/api/repository"
 	"github.com/abdullah-mobin/somojhota-somiti/api/response"
+	"github.com/abdullah-mobin/somojhota-somiti/utils"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -63,6 +64,35 @@ func GetTransaction(c *fiber.Ctx) error {
 	}
 
 	return response.Ok(c, "Transaction Retrieved Successfully", transaction)
+}
+
+// Transaction godoc
+//
+//	@Summary		Get transactions by filter
+//	@Description	retrieve a transactions by filter like business id, date etc
+//	@Tags			Transaction
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id			query	string	false	"transaction id"
+//	@Param			business_id	query	string	false	"business id"
+//	@Param			date		query	string	false	"date range in yyyy-mm-dd"
+//	@Router			/transaction/ [get]
+func GetTransactions(c *fiber.Ctx) error {
+	queries := c.Queries()
+	eligibleFilters := []string{"id", "business_id", "date"}
+	objectIDFields := []string{"business_id", "id"}
+	filters, err := utils.ParseFilters(queries, eligibleFilters, objectIDFields)
+	if err != nil {
+		return response.BadRequestException(c, "Invalid filter parameters", []string{err.Error()})
+	}
+
+	transactions, err := repository.NewTransactionRepository().GetTransactionsByFilter(context.Background(), filters)
+	if err != nil {
+		return response.InternalServerErrorException(c, "Failed to get transactions", err.Error())
+	}
+
+	return response.Ok(c, "Transactions Retrieved Successfully", transactions)
 }
 
 // Transaction godoc

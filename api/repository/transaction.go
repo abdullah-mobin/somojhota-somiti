@@ -107,6 +107,21 @@ func (r *TransactionRepository) GetTransactionByID(ctx context.Context, transact
 	return &transaction, nil
 }
 
+func (r *TransactionRepository) GetTransactionsByFilter(ctx context.Context, filters bson.M) ([]models.Transaction, error) {
+	cursor, err := r.transactionCollection.Find(ctx, filters)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
+
+	var transactions []models.Transaction
+	if err = cursor.All(ctx, &transactions); err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}
+
 func (r *TransactionRepository) UpdateTransactionByID(ctx context.Context, transactionID string, dto *dtos.UpdateTransactionDTO) error {
 	objID, err := primitive.ObjectIDFromHex(transactionID)
 	if err != nil {
