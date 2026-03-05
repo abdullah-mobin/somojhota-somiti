@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/abdullah-mobin/somojhota-somiti/api/dtos"
@@ -50,11 +51,14 @@ func (r *TransactionRepository) CreateTransaction(ctx context.Context, dto *dtos
 	if err != nil {
 		return nil, errors.New("invalid date format")
 	}
+	m, y, _ := utils.ParseMonthYear(date)
 	transaction := &models.Transaction{
 		BusinessID: businessID,
 		UserID:     userID,
 		Amount:     dto.Amount,
 		Balance:    dto.Balance,
+		Month:      time.Month(m).String(),
+		Year:       strconv.Itoa(y),
 		Date:       date,
 		CreatedAt:  time.Now(),
 		UpdatedAt:  time.Now(),
@@ -64,8 +68,6 @@ func (r *TransactionRepository) CreateTransaction(ctx context.Context, dto *dtos
 	if err != nil {
 		return nil, err
 	}
-
-	m, y, _ := utils.ParseMonthYear(date)
 
 	balanceSheet := &models.BalanceSheet{
 		BusinessID: businessID,

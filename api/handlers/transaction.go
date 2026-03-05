@@ -76,11 +76,13 @@ func GetTransaction(c *fiber.Ctx) error {
 //	@Security		BearerAuth
 //	@Param			id			query	string	false	"transaction id"
 //	@Param			business_id	query	string	false	"business id"
-//	@Param			date		query	string	false	"date range in yyyy-mm-dd"
+//	@Param			date		query	string	false	"date in yyyy-mm-dd"
+//	@Param			month		query	string	false	"month ie: january, february, 9, 10 etc"
+//	@Param			year		query	string	false	"year in yyyy"
 //	@Router			/transaction/ [get]
 func GetTransactions(c *fiber.Ctx) error {
 	queries := c.Queries()
-	eligibleFilters := []string{"id", "business_id", "date"}
+	eligibleFilters := []string{"id", "business_id", "date", "month", "year"}
 	objectIDFields := []string{"business_id", "id"}
 	filters, err := utils.ParseFilters(queries, eligibleFilters, objectIDFields)
 	if err != nil {

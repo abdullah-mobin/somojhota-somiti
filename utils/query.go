@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -25,6 +26,23 @@ func ParseFilters(queries map[string]string, eligibleFilters []string, objectIDF
 
 		// Skip pagination parameters - they're handled separately
 		if key == "beforeId" || key == "afterId" || key == "limit" || key == "id" {
+			continue
+		}
+
+		if key == "month" {
+			monthNum, err := strconv.Atoi(val)
+			if err == nil && monthNum >= 1 && monthNum <= 12 {
+				monthName := time.Month(monthNum).String()
+				filters[key] = bson.M{
+					"$regex":   monthName,
+					"$options": "i",
+				}
+			} else {
+				filters[key] = bson.M{
+					"$regex":   val,
+					"$options": "i",
+				}
+			}
 			continue
 		}
 
