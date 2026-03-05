@@ -9,3 +9,7 @@ import (
 func BalanceSheetRoutes(route fiber.Router) {
 	route.Get("/:business_id", middlewares.IsAuthenticated, handlers.GetBalanceSheet)
 }
+
+func BalanceTransactionRoutes(route fiber.Router) {
+	route.Get("/:business_id", middlewares.IsAuthenticated, handlers.GetBalanceTransaction)
+}

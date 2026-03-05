@@ -82,24 +82,23 @@ func (r *UserRepository) GetUserByID(ctx context.Context, userID string) (*model
 	return &data, nil
 }
 
-// func (r *UserRepository) UpdateUserByID(ctx context.Context, userID string, update bson.M) error {
-// 	objID, err := primitive.ObjectIDFromHex(userID)
-// 	if err != nil {
-// 		return err
-// 	}
+func (r *UserRepository) GetAllUserByBusinessID(ctx context.Context, businessID string) ([]models.User, error) {
+	objID, err := primitive.ObjectIDFromHex(businessID)
+	if err != nil {
+		return nil, err
+	}
 
-// 	var updateDoc bson.M
-// 	for k := range update {
-// 		if len(k) > 0 && k[0] == '$' {
-// 			updateDoc = update
-// 			break
-// 		}
-// 	}
-// 	if updateDoc == nil {
-// 		updateDoc = bson.M{"$set": update}
-// 	}
+	cursor, err := r.userCollection.Find(ctx, bson.M{
+		"business_id": objID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(ctx)
 
-// 	_, err = r.userCollection.UpdateOne(ctx, bson.M{"_id": objID}, updateDoc)
-// 	_, err = r.credentialCollection.UpdateOne(ctx, bson.M{"user_id": objID}, )
-// 	return err
-// }
+	var data []models.User
+	if err := cursor.All(ctx, &data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}

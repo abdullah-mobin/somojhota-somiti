@@ -65,7 +65,7 @@ func (r *TransactionRepository) CreateTransaction(ctx context.Context, dto *dtos
 		return nil, err
 	}
 
-	m, y := utils.ParseMonthYear(dto.Date)
+	m, y, _ := utils.ParseMonthYear(date)
 
 	balanceSheet := &models.BalanceSheet{
 		BusinessID: businessID,
@@ -119,13 +119,13 @@ func (r *TransactionRepository) UpdateTransactionByID(ctx context.Context, trans
 	if err != nil {
 		return err
 	}
-	dateStr = existingTransaction.Date.String()
+	dateStr = existingTransaction.Date
 
 	updateData := bson.M{
 		"updated_at": time.Now(),
 	}
 
-	var date time.Time
+	var date string
 	if dto.Date != nil {
 		date, err = utils.ParseDateOnly(*dto.Date)
 		if err != nil {
@@ -144,10 +144,10 @@ func (r *TransactionRepository) UpdateTransactionByID(ctx context.Context, trans
 			return errors.New("balance cannot be negative")
 		}
 		updateData["balance"] = *dto.Balance
-		m, y := utils.ParseMonthYear(dateStr)
+		m, y, _ := utils.ParseMonthYear(dateStr)
 		sheetRepo := NewBalanceSheetRepository()
 		existingSheet, _ := sheetRepo.GetExistingSheet(context.Background(), existingTransaction.BusinessID.Hex(), m, y)
-		sheetRepo.Decrement(context.Background(), existingSheet, existingSheet.Total)
+		sheetRepo.Decrement(context.Background(), existingSheet, existingTransaction.Balance)
 		sheetRepo.Increment(context.Background(), existingSheet, *dto.Balance)
 	}
 

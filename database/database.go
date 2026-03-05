@@ -12,13 +12,13 @@ import (
 )
 
 type Collections struct {
-	UserCollection         *mongo.Collection // ok
-	CredentialCollection   *mongo.Collection // ok
-	BusinessCollection     *mongo.Collection // ok
-	TransactionCollection  *mongo.Collection // ok
-	CostCollection         *mongo.Collection // ok
-	EarnCollection         *mongo.Collection // ok
-	BalanceSheetCollection *mongo.Collection // ok
+	UserCollection         *mongo.Collection
+	CredentialCollection   *mongo.Collection
+	BusinessCollection     *mongo.Collection
+	TransactionCollection  *mongo.Collection
+	CostCollection         *mongo.Collection
+	EarnCollection         *mongo.Collection
+	BalanceSheetCollection *mongo.Collection
 }
 
 var DbCollections Collections
@@ -29,13 +29,13 @@ func InitCollections() error {
 	if err != nil {
 		return err
 	}
-	DbCollections.UserCollection = GetDBCollection("users")                  //
-	DbCollections.CredentialCollection = GetDBCollection("credentials")      //
-	DbCollections.BusinessCollection = GetDBCollection("businesses")         //
-	DbCollections.TransactionCollection = GetDBCollection("transactions")    //
-	DbCollections.CostCollection = GetDBCollection("costs")                  //
-	DbCollections.EarnCollection = GetDBCollection("earns")                  //
-	DbCollections.BalanceSheetCollection = GetDBCollection("balance_sheets") //
+	DbCollections.UserCollection = GetDBCollection("users")
+	DbCollections.CredentialCollection = GetDBCollection("credentials")
+	DbCollections.BusinessCollection = GetDBCollection("businesses")
+	DbCollections.TransactionCollection = GetDBCollection("transactions")
+	DbCollections.CostCollection = GetDBCollection("costs")
+	DbCollections.EarnCollection = GetDBCollection("earns")
+	DbCollections.BalanceSheetCollection = GetDBCollection("balance_sheets")
 	return nil
 }
 

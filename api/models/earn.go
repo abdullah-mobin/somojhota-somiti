@@ -12,7 +12,7 @@ type Earn struct {
 	UserID      primitive.ObjectID `bson:"user_id" json:"user_id"`
 	Description string             `bson:"description" json:"description"`
 	Balance     float64            `bson:"balance" json:"balance"`
-	Date        time.Time          `bson:"date" json:"date"`
+	Date        string             `bson:"date" json:"date"`
 	CreatedAt   time.Time          `bson:"created_at" json:"created_at"`
 	UpdatedAt   time.Time          `bson:"updated_at" json:"updated_at"`
 }

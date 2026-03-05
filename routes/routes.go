@@ -13,6 +13,7 @@ func SetupRoutes(app *fiber.App) {
 	routers.BusinessRoutes(api.Group("/business"))
 	routers.TransactionRoutes(api.Group("/transaction"))
 	routers.BalanceSheetRoutes(api.Group("/balance-sheet"))
+	routers.BalanceTransactionRoutes(api.Group("/balance-transaction"))
 	routers.EarnRoutes(api.Group("/earn"))
 	routers.CostRoutes(api.Group("/cost"))
 }

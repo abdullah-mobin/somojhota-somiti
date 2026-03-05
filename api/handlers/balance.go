@@ -9,11 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Balance-Sheet godoc
+// Balance godoc
 //
 //	@Summary		Get a balance sheet
 //	@Description	retrieve a balance sheet by business ID
-//	@Tags			Balance-sheet
+//	@Tags			Balance
 //	@Accept			json
 //	@Produce		json
 //	@Security		BearerAuth
@@ -31,4 +31,28 @@ func GetBalanceSheet(c *fiber.Ctx) error {
 	}
 
 	return response.Ok(c, "Balance Sheet Retrieved Successfully", transaction)
+}
+
+// Balance godoc
+//
+//	@Summary		Get a balance transaction
+//	@Description	retrieve a balance transaction by business ID
+//	@Tags			Balance
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			business_id	path	string	true	"business id"
+//	@Router			/balance-transaction/{business_id} [get]
+func GetBalanceTransaction(c *fiber.Ctx) error {
+	bID := c.Params("business_id")
+
+	transaction, err := repository.NewBalanceSheetRepository().GetBalanceTransactionByBusinessID(context.Background(), bID)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return response.NotFoundException(c, "balance transaction not found", nil)
+		}
+		return response.InternalServerErrorException(c, "Failed to get balance transaction", err.Error())
+	}
+
+	return response.Ok(c, "Balance Transaction Retrieved Successfully", transaction)
 }
