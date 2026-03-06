@@ -11,6 +11,7 @@ type RegisterBusinessDTO struct {
 type RegisterUserDTO struct {
 	Name        string `json:"name"`
 	Email       string `json:"email"`
+	BusinessID  string `json:"business_id"`
 	PhoneNumber string `json:"phone_number"`
 	Password    string `json:"password"`
 }
@@ -25,6 +26,7 @@ func (obj RegisterUserDTO) Validate() error {
 	return validation.ValidateStruct(&obj,
 		validation.Field(&obj.Name, validation.Required),
 		validation.Field(&obj.PhoneNumber, validation.Required),
+		validation.Field(&obj.BusinessID, validation.Required),
 		validation.Field(&obj.Password, validation.Required),
 	)
 }

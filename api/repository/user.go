@@ -34,10 +34,15 @@ func (r *UserRepository) CreateNewUser(ctx context.Context, dto *dtos.RegisterUs
 	if !phoneAvailable {
 		return nil, nil, errors.New("phone number already taken")
 	}
+	bID, err := primitive.ObjectIDFromHex(dto.BusinessID)
+	if err != nil {
+		return nil, nil, errors.New("invalid business id")
+	}
 
 	user := &models.User{
 		Name:        dto.Name,
 		Email:       dto.Email,
+		BusinessID:  bID,
 		PhoneNumber: dto.PhoneNumber,
 		Status:      models.StatusActive,
 		CreatedAt:   time.Now(),
